@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>LD Themes</title>
+</head>
+
+<body>
+    <h1>Ludum Dare Common Final Themes</h1>
+    <div id="theme-counts"></div>
+
+    <style>
+        * {
+            font-family: monospace;
+            /* background: hsl(0, 0%, 8%);
+            color: white; */
+        }
+    </style>
+    <script>
+        async function formData() {
+            let plotX = []
+            let plotY = []
+
+            fetch('/api/theme-counts')
+                .then((res) => {
+                    return res.json()
+                })
+                .then((data) => {
+                    for (theme in data) {
+                        if (data[theme] > 1) {
+                            plotX.push(theme)
+                            plotY.push(data[theme])
+                        }
+                    }
+                    return [plotX, plotY]
+                })
+                .then((plotData) => {
+                    themeCounts = document.getElementById('theme-counts');
+
+                    Plotly.newPlot(themeCounts, [{
+                        x: plotData[0],
+                        y: plotData[1],
+                        type: 'bar'
+                    }], {
+                        margin: { t: 0 }
+                    })
+                })
+                .catch((e) => {
+                    // do nothing
+                    console.log(`Error happened ${e}`)
+                })
+        }
+
+        formData()
+
+    </script>
+
+</body>
+
+</html>

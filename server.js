@@ -8,6 +8,8 @@ const jamRange = {
     high: 48
 }
 
+var jamThemes = null;
+
 app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
@@ -49,7 +51,10 @@ app.get('/api/jam-themes', async (req, res) => {
 })
 
 app.get('/api/theme-counts', async (req, res) => {
-    let jamThemes = await getJamThemes()
+    if (jamThemes == null) {
+        jamThemes = await getJamThemes()
+    }
+
     let themeCounts = {}
 
     for (jam in jamThemes) {
@@ -66,6 +71,9 @@ app.get('/api/theme-counts', async (req, res) => {
     res.send(themeCounts)
 })
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Example app listening at http://localhost:${port}`)
+
+    // make the call when the server is started, not when the api request is made
+    jamThemes = await getJamThemes()
 })

@@ -10,14 +10,12 @@
 </head>
 
 <body>
-    <h1>Ludum Dare Common Final Themes</h1>
+    <h1>Ludum Dare Common Final Themes:</h1>
     <div id="theme-counts"></div>
 
     <style>
         * {
             font-family: monospace;
-            /* background: hsl(0, 0%, 8%);
-            color: white; */
         }
     </style>
     <script>
@@ -25,34 +23,25 @@
             let plotX = []
             let plotY = []
 
-            fetch('/api/theme-counts')
-                .then((res) => {
-                    return res.json()
-                })
-                .then((data) => {
-                    for (theme in data) {
-                        if (data[theme] > 1) {
-                            plotX.push(theme)
-                            plotY.push(data[theme])
-                        }
-                    }
-                    return [plotX, plotY]
-                })
-                .then((plotData) => {
-                    themeCounts = document.getElementById('theme-counts');
+            let themeCounts = await fetch('/api/theme-counts')
+            let themeJson = await themeCounts.json()
 
-                    Plotly.newPlot(themeCounts, [{
-                        x: plotData[0],
-                        y: plotData[1],
-                        type: 'bar'
-                    }], {
-                        margin: { t: 0 }
-                    })
-                })
-                .catch((e) => {
-                    // do nothing
-                    console.log(`Error happened ${e}`)
-                })
+            for (theme in themeJson) {
+                if (themeJson[theme] > 1) {
+                    plotX.push(theme)
+                    plotY.push(themeJson[theme])
+                }
+            }
+
+            plot = document.getElementById('theme-counts');
+
+            Plotly.newPlot(plot, [{
+                x: plotX,
+                y: plotY,
+                type: 'bar'
+            }], {
+                margin: { t: 0 }
+            })
         }
 
         formData()

@@ -3,6 +3,11 @@
 Plots the most common Ludum Dare final theme round selections.
 
 
+<div align="center">
+    <img src="img/plot.png" />
+</p>
+
+
 #### Setup
 
 - Clone this repo and run `npm install`
